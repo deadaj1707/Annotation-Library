@@ -31,7 +31,7 @@ The `CacheUser` annotation library provides an easy way to use caching in your S
    </dependency>
    ```
 
-   ### Setup
+### Setup
 
 1. **Redis Configuration**
 
