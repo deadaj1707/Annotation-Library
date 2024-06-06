@@ -160,11 +160,28 @@ public @interface Cacheuser {
    ```
 
 
+## Execution
+
+1. Adding to Cache
+
+   ```xml
+   "Adding data to Redis cache for key " + cacheKey
+   ```
+   This message indicates that the data is being added to the Redis cache with the specified cache key.
+
+2. Fetching Data
+
+   ```xml
+   "Fetching data from Redis cache for key " + cacheKey
+   ```
+   This message indicates that the data is being retrieved from the Redis cache using the specified cache key.
+   
+
 ## Troubleshooting
 
 1. **Redis configuration fail**
 
-   If Redis fails to connect then the method runs smoothly as expected but caching is not done with logging of the error as:
+   If Redis fails to connect, the method will execute smoothly but caching will not be performed. An error message will be logged indicating the failure to connect to the Redis server:
    
    ```xml
    "Failed to connect to Redis server: " + $errorMessage
@@ -172,7 +189,28 @@ public @interface Cacheuser {
 
 2. **Parameter name invalid**
 
-   If parameter name is given incorrectly then method resumes its execuion but caching is stopped as key cannot be generated
+   If an invalid parameter name is provided, the method will continue its execution but caching will be disabled due to the inability to generate the cache key. An error message will be logged indicating the parameter name
+   not found in the method signature:
+
+   ```xml
+   "Parameter {$parameterName} not found in method signature"
+   ```
+
+4. **Request Identifier name invalid**
+
+   If the request identifier field specified is not present in the given parameter object, an error message will be logged:
+
+   ```xml
+   "Error accessing field {$requestIndentifier} in argument: $errorMesssage"
+   ```
+
+5. **If Time-to-live is invalid**
+
+   If an invalid time-to-live value is provided, caching will fail. An error message will be logged indicating that the time to expire shouldn't be negative:
+
+   ```xml
+   Time to expire shouldn't be negative. Failed to Cache"
+   ```
 
 
 
