@@ -77,7 +77,10 @@ The `CacheUser` annotation library provides an easy way to use caching in your S
    }
    ```
 
-3. **Usage wuth requestIdentifier**
+3. **Usage with requestIdentifier**
+
+   Alternatively, developers can pass arguments as objects of a designated class. The relevant field of the class intended to serve as the key in caching is specified within the requestIdentifier,
+   while the object's name is defined in the parameterName.
 
    ```example2
    import com.aditya.task.annotation.CacheUser;
@@ -97,8 +100,11 @@ The `CacheUser` annotation library provides an easy way to use caching in your S
            return userService.createUser(user);
        }
    }
+   ```
 
-4. **Usage with multiple parameters**
+5. **Usage with multiple parameters**
+
+   Furthermore, it's possible to pass multiple parameters to generate the cache key. This can be achieved by providing two parameterNames within the parameterMappings.
 
    ```example3
    import com.aditya.task.annotation.CacheUser;
