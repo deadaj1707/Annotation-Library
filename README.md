@@ -44,6 +44,6 @@ The `CacheUser` annotation library provides an easy way to use caching in your S
    spring.redis.password=$(redisPassword)
    ```
 
-   ### Usage
+## Usage
 
    
