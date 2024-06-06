@@ -47,6 +47,38 @@ The `CacheUser` annotation library provides an easy way to use caching in your S
    ```
 
 
+## Structure
+
+The `Cacheuser` annotation is designed to provide caching capabilities for methods within the application. Here's a breakdown of its structure and the significance of each argument:
+
+- **Retention Policy**: `@Retention(RetentionPolicy.RUNTIME)`
+  - This line indicates that the annotation information should be retained at runtime, allowing it to be accessible via reflection.
+
+- **Target**: `@Target(ElementType.METHOD)`
+  - Specifies that the annotation can only be applied to methods. Methods annotated with `@Cacheuser` will be eligible for caching.
+
+- **Annotation Attributes**:
+
+  - `key()`
+    - This attribute denotes the cache key associated with the annotated method. It is a mandatory parameter and must be provided when using the `@Cacheuser` annotation.
+
+  - `parameterMappings()`
+    - An array of `ParameterMapping` objects. This attribute allows you to specify parameter mappings if the cached data depends on method parameters. It defaults to an empty array if not provided.
+
+  - `ttl()`
+    - This attribute indicates the time-to-live (TTL) for cached data in seconds. It is optional and has a default value of 3600 seconds (1 hour). You can adjust this value based on your caching requirements.
+
+```
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Cacheuser {
+    String key();
+    ParameterMapping[] parameterMappings() default {}; // Array of ParameterMapping objects
+    long ttl() default 3600; // Optional TTL with default value
+}
+```
+
+
 ## Usage
 
 1. **Annotate Your Methods**
@@ -68,7 +100,7 @@ The `CacheUser` annotation library provides an easy way to use caching in your S
    
        @CacheUser(key = "ProductCache", parameterMappings = {
                @ParameterMapping(parameterName = "id")
-       })
+       }, ttl = 600)
        @GetMapping("/{id}")
        public Product getProductById(@PathVariable String id) {
            // Method logic to fetch product by id
@@ -93,7 +125,7 @@ The `CacheUser` annotation library provides an easy way to use caching in your S
    
        @CacheUser(key = "UserCache", parameterMappings = {
                @ParameterMapping(parameterName = "user",requestIndentifier="username")
-       })
+       }, ttl = 120)
        @PostMapping("/create")
        public User createUser(@RequestBody User user) {
            // Method logic to create user
@@ -118,7 +150,7 @@ The `CacheUser` annotation library provides an easy way to use caching in your S
        @CacheUser(key = "ProductCache", parameterMappings = {
                @ParameterMapping(parameterName = "id"),
                @ParameterMapping(parameterName = "type")
-       })
+       }, ttl = 120)
        @GetMapping("/{id}/{type}")
        public Product getProductByIdAndType(@PathVariable String id, @PathVariable String type) {
            // Method logic to fetch product by id and type
@@ -126,6 +158,21 @@ The `CacheUser` annotation library provides an easy way to use caching in your S
        }
    }
    ```
+
+
+## Troubleshooting
+
+1. **Redis configuration fail**
+
+   If Redis fails to connect then the method runs smoothly as expected but caching is not done with logging of the error as:
+   
+   ```xml
+   "Failed to connect to Redis server: " + $errorMessage
+   ```
+
+2. **Parameter name invalid**
+
+   If parameter name is given incorrectly then method resumes its execuion but caching is stopped as key cannot be generated
 
 
 
