@@ -30,3 +30,20 @@ The `CacheUser` annotation library provides an easy way to use caching in your S
        <version>1.0.1-SNAPSHOT</version>
    </dependency>
    ```
+
+   ### Setup
+
+1. **Redis Configuration**
+
+   Configure Redis in your application.properties or application.yml:
+
+   ```properties
+   # Redis configuration
+   spring.redis.host=$(hostUrl)
+   spring.redis.port=$(redisPort)
+   spring.redis.password=$(redisPassword)
+   ```
+
+   ### Usage
+
+   
