@@ -68,6 +68,17 @@ The `Cacheuser` annotation is designed to provide caching capabilities for metho
   - `ttl()`
     - This attribute indicates the time-to-live (TTL) for cached data in seconds. It is optional and has a default value of 3600 seconds (1 hour). You can adjust this value based on your caching requirements.
 
+  - `cacheType()`
+    - Specifies the type of cache to be used. It defaults to `CacheType.IN_MEMORY`. You can choose between `IN_MEMORY` and `REDIS` cache types.
+
+  - `evictionPolicy()`
+    - Specifies the eviction policy to be used for the cache. It defaults to `EvictionPolicy.LRU` (Least Recently Used).
+
+  - `capacity()`
+    - Specifies the capacity of the cache. This attribute is relevant for in-memory caching and defaults to 1500 entries.
+
+
+
 ```
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
@@ -75,6 +86,9 @@ public @interface Cacheuser {
     String key();
     ParameterMapping[] parameterMappings() default {}; // Array of ParameterMapping objects
     long ttl() default 3600; // Optional TTL with default value
+    CacheType cacheType() default CacheType.IN_MEMORY; // New parameter to specify cache type
+    EvictionPolicy evictionPolicy() default EvictionPolicy.LRU; // Default to LRU
+    int capacity() default 1500;
 }
 ```
 
