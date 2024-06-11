@@ -1,13 +1,13 @@
 # CacheUser Annotation Library
 
-The `CacheUser` annotation library provides an easy way to use caching in your Spring Boot applications with Redis. This guide will help you get started with adding caching to your services.
-
+The `CacheUser` annotation library provides an easy way to implement method-level caching in your Spring Boot applications with support for both in-memory and Redis caches. This guide will help you get started with adding caching to your services.
 
 ## Features
 
-- Simple annotation for caching using Redis.
-- Compatible with Spring Boot.
-- Flexible parameter mapping for cache keys.
+- **Simple Annotation for Caching**: Easily annotate methods for caching using either in-memory or Redis.
+- **Spring Boot Compatibility**: Seamlessly integrates with Spring Boot applications.
+- **Customizable Cache Keys**: Define flexible parameter mappings to customize cache keys.
+- **Configurable Options**: Set time-to-live (TTL), eviction policies, and cache capacity according to your needs.
 
 
 ## Getting Started
@@ -154,6 +154,7 @@ public @interface Cacheuser {
 
    ```example3
    import com.aditya.task.annotation.CacheUser;
+   import com.aditya.task.annotation.CacheType;
    import com.aditya.task.annotation.ParameterMapping;
    import org.springframework.web.bind.annotation.*;
    
@@ -164,7 +165,7 @@ public @interface Cacheuser {
        @CacheUser(key = "ProductCache", parameterMappings = {
                @ParameterMapping(parameterName = "id"),
                @ParameterMapping(parameterName = "type")
-       }, ttl = 120)
+       },cacheType = CacheType.REDIS, ttl = 120)
        @GetMapping("/{id}/{type}")
        public Product getProductByIdAndType(@PathVariable String id, @PathVariable String type) {
            // Method logic to fetch product by id and type
@@ -172,6 +173,38 @@ public @interface Cacheuser {
        }
    }
    ```
+
+6. **Implementing custom IN-MEMORY/REDIS caching**
+
+   We can apply custom caching options like, ttl(time to live for that key), cache eviction policies(LRU,LFU and FIFO) and capacity(limit to the number of method calls).
+
+   ```example4
+   import com.aditya.task.annotation.CacheUser;
+   import com.aditya.task.annotation.CacheType;
+   import com.aditya.task.annotation.ParameterMapping;
+   import com.aditya.task.annotation.EvictionPolicy;
+   import org.springframework.web.bind.annotation.*;
+   
+   @RestController
+   @RequestMapping("/products")
+   public class ProductController {
+   
+       @CacheUser(key = "ProductCache", parameterMappings = {
+               @ParameterMapping(parameterName = "id"),
+               @ParameterMapping(parameterName = "type")
+       },
+       cacheType = CacheType.IN_MEMORY,
+       capacity = 300,
+       evictionPolicy = EvictionPolicy.LRU,
+       ttl = 120)
+       @GetMapping("/{id}/{type}")
+       public Product getProductByIdAndType(@PathVariable String id, @PathVariable String type) {
+           // Method logic to fetch product by id and type
+           return productService.getProductByIdAndType(id, type);
+       }
+   }
+   ```
+   
 
 
 ## Execution
