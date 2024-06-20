@@ -27,8 +27,8 @@ The `CacheUser` annotation library provides an easy way to implement method-leve
 
    ```xml
    <dependency>
-       <groupId>com.aditya</groupId>
-       <artifactId>task</artifactId>
+       <groupId>com.pchf</groupId>
+       <artifactId>cacheutik</artifactId>
        <version>1.0.1-SNAPSHOT</version>
    </dependency>
    ```
